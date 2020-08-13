@@ -4,12 +4,15 @@ import 'semantic-ui-css/semantic.min.css'
 import './app/layout/styles.css'
 import App from './app/layout/App'
 import * as serviceWorker from './serviceWorker'
+import { BrowserRouter } from 'react-router-dom'
 
 const rootEl = document.getElementById('root')
 
 ReactDOM.render(
 	<React.StrictMode>
-		<App />
+		<BrowserRouter>
+			<App />
+		</BrowserRouter>
 	</React.StrictMode>, 
 	rootEl
 )
