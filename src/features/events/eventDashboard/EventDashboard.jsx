@@ -1,37 +1,38 @@
-import React from "react"
-import { Grid } from "semantic-ui-react"
-import EventList from "./EventList"
+import React from 'react'
+import { Grid } from 'semantic-ui-react'
+import EventList from './EventList'
 import { useSelector } from 'react-redux'
+import EventListItemPlaceholder from './EventListItemPlaceholder'
+import EventFilters from './EventFilters'
+import { listenToEventsFromFirestore } from '../../../app/firestore/firestoreService'
+import { listenToEvents } from '../eventActions'
+import { useDispatch } from 'react-redux'
+import useFirestoreCollection from '../../../app/hooks/useFirestoreCollection'
 
 export default function EventDashboard() {
-	const { events } = useSelector(state => state.event)
+	const dispatch = useDispatch()
+	const { events } = useSelector((state) => state.event)
+	const { loading } = useSelector((state) => state.async)
 
-	// function handleCreateEvent(event) {
-	// 	setEvents([...events, event])
-	// }
-
-	// function handleUpdateEvent(updatedEvent) {
-	// 	setEvents(
-	// 		events.map((evt) =>
-	// 			evt.id === updatedEvent.id ? updatedEvent : evt
-	// 		)
-	// 	)
-	// }
-
-	function handleDeleteEvent(eventId) {
-		// setEvents(events.filter((evt) => evt.id !== eventId))
-	}
+	useFirestoreCollection({
+		query: () => listenToEventsFromFirestore(),
+		data: (events) => dispatch(listenToEvents(events)),
+		deps: [dispatch],
+	})
 
 	return (
 		<Grid>
 			<Grid.Column width={10}>
-				<EventList
-					events={events}
-					deleteEvent={handleDeleteEvent}
-				/>
+				{loading && (
+					<>
+						<EventListItemPlaceholder />
+						<EventListItemPlaceholder />
+					</>
+				)}
+				<EventList events={events} />
 			</Grid.Column>
 			<Grid.Column width={6}>
-				<h3>Event Filters</h3>
+				<EventFilters />
 			</Grid.Column>
 		</Grid>
 	)
