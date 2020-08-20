@@ -26,7 +26,7 @@ export function listenToEventsFromFirestore() {
 }
 
 export function listenToEventFromFirestore(eventId) {
-    return db.collection('events').doc(eventId)
+	return db.collection('events').doc(eventId)
 }
 
 export function addEventToFirestore(event) {
@@ -37,8 +37,8 @@ export function addEventToFirestore(event) {
 		attendees: firebase.firestore.FieldValue.arrayUnion({
 			id: cuid(),
 			displayName: 'Diana',
-			photoURL: 'https://randomuser.me/api/portraits/women/20.jpg'
-		})
+			photoURL: 'https://randomuser.me/api/portraits/women/20.jpg',
+		}),
 	})
 }
 
@@ -52,6 +52,18 @@ export function deleteEventInFirestore(eventId) {
 
 export function cancelEventToggle(event) {
 	return db.collection('events').doc(event.id).update({
-		isCancelled: !event.isCancelled
+		isCancelled: !event.isCancelled,
 	})
+}
+
+export function setUserProfileData(user) {
+	return db
+		.collection('users')
+		.doc(user.uid)
+		.set({
+			displayName: user.displayName,
+			email: user.email,
+			photoURL: user.photoURL || null,
+			createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+		})
 }
