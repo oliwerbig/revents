@@ -14,12 +14,12 @@ export default function EventListItem({ event }) {
 						<Item.Image
 							size='tiny'
 							circular
-							src={event.hostPhotoURL}
+							src={event.hostPhotoURL || '/assets/user.png'}
 						/>
 						<Item.Content>
 							<Item.Header content={event.title} />
 							<Item.Description>
-								Hosted by {event.hostedBy}
+								Hosted by <Link to={`/profile/${event.hostUid}`}>{event.hostedBy}</Link>
 							</Item.Description>
 							{event.isCancelled && (
 								<Label
