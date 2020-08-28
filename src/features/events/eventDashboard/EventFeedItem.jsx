@@ -1,5 +1,4 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 import { Feed } from 'semantic-ui-react'
 import { formatDistance } from 'date-fns'
 
@@ -9,22 +8,18 @@ export default function EventFeedItem({ post }) {
 		case 'joined-event':
 			summary = (
 				<>
-					<Link to={`/profile/${post.userUid}`}>
-						{post.displayName}
-					</Link>{' '}
+					<a href={`/profile/${post.userUid}`}>{post.displayName} </a>{' '}
 					has signed up to{' '}
-					<Link to={`/events/${post.eventId}`}>{post.title}</Link>
+					<a href={`/events/${post.eventId}`}>{post.title}</a>
 				</>
 			)
 			break
 		case 'left-event':
 			summary = (
 				<>
-					<Link to={`/profile/${post.userUid}`}>
-						{post.displayName}
-					</Link>{' '}
+					<a href={`/profile/${post.userUid}`}>{post.displayName} </a>{' '}
 					has cancelled their place on{' '}
-					<Link to={`/events/${post.eventId}`}>{post.title}</Link>
+					<a href={`/events/${post.eventId}`}>{post.title}</a>
 				</>
 			)
 			break
@@ -32,7 +27,6 @@ export default function EventFeedItem({ post }) {
 			summary = 'Something happened'
 			break
 	}
-
 	return (
 		<Feed.Event>
 			<Feed.Label image={post.photoURL} />
@@ -40,6 +34,7 @@ export default function EventFeedItem({ post }) {
 				<Feed.Date>
 					{formatDistance(new Date(post.date), new Date())} ago
 				</Feed.Date>
+				<Feed.Summary>{summary}</Feed.Summary>
 			</Feed.Content>
 		</Feed.Event>
 	)

@@ -1,26 +1,30 @@
-import React, { useEffect } from 'react'
-import { Header, Feed } from 'semantic-ui-react'
-import { Segment } from 'semantic-ui-react'
-import { useSelector, useDispatch } from 'react-redux'
-import { getUserFeedRef, firebaseObjectToArray } from '../../../app/firestore/firebaseService'
+import React from 'react'
+import { Header, Segment, Feed } from 'semantic-ui-react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useEffect } from 'react'
+import {
+	getUserFeedRef,
+	firebaseObjectToArray,
+} from '../../../app/firestore/firebaseService'
 import { listenToFeed } from '../../profiles/profileActions'
+import EventFeedItem from './EventFeedItem'
 
 export default function EventsFeed() {
 	const dispatch = useDispatch()
 	const { feed } = useSelector((state) => state.profile)
 
-    useEffect(() => {
-        getUserFeedRef().on('value', snapshot => {
-            if (!snapshot.exists()) {
-                return
-            }
-            const feed = firebaseObjectToArray(snapshot.val()).reverse()
-            dispatch(listenToFeed(feed))
-        })
-        return () => {
-            getUserFeedRef().off()
-        }
-    }, [dispatch])
+	useEffect(() => {
+		getUserFeedRef().on('value', (snapshot) => {
+			if (!snapshot.exists()) {
+				return
+			}
+			const feed = firebaseObjectToArray(snapshot.val()).reverse()
+			dispatch(listenToFeed(feed))
+		})
+		return () => {
+			getUserFeedRef().off()
+		}
+	}, [dispatch])
 
 	return (
 		<>
@@ -32,9 +36,9 @@ export default function EventsFeed() {
 			/>
 			<Segment attached='bottom'>
 				<Feed>
-					{feed.map(post => (
-                        <Feed.Event post={post} key={post.id} />
-                    ))}
+					{feed.map((post) => (
+						<EventFeedItem post={post} key={post.id} />
+					))}
 				</Feed>
 			</Segment>
 		</>
